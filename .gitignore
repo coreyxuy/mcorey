@@ -2,10 +2,42 @@
 ### Example user template template
 ### Example user template
 
-# IntelliJ project files
-.idea
-*.iml
-out
-gen
-!/.idea/
+*.class
+
+#package file
+*.war
+*.ear
+
+#kdiff3 ignore
+*.orig
+
+#maven
+target/
+
+#eclipse ignore
+.settings/
+.project
+.classpath
+
+#idea
+.idea/
 /.idea/
+*.ipr
+*.iml
+*.iws
+
+# temp file 临时文件
+*.log
+*.cache
+*.diff
+*.path
+*.tmp
+
+# system ignore 系统级
+.DS_Store
+Thumbs.db
+
+
+
+
+
