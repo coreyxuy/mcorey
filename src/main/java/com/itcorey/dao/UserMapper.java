@@ -75,5 +75,5 @@ public interface UserMapper {
      * @param userId
      * @return
      */
-    int checkEmailByUserId(@Param("email") String email, @Param("userI") Integer userId);
+    int checkEmailByUserId(@Param("email") String email, @Param("userId") Integer userId);
 }

@@ -51,7 +51,7 @@ public class UserController {
      * @param session
      * @return
      */
-    @RequestMapping(value = "logout.do", method = RequestMethod.GET)
+    @RequestMapping(value = "logout.do", method = RequestMethod.POST)
     @ResponseBody
     public ServerResponse<String> logout(HttpSession session) {
         session.removeAttribute(Const.CURRENT_USER);
@@ -161,7 +161,7 @@ public class UserController {
 
 
     /**
-     * 更新用户信息接口
+     * 登录状态更新用户信息接口
      *
      * @param session
      * @param user

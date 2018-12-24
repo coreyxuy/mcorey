@@ -156,7 +156,7 @@
 
     <!--校验用户名是否存在-->
     <select id="chackUserName" resultType="java.lang.Integer" parameterType="string">
-    SELECT COUNT (1) FROM  mmall_user WHERE username = #{username}
+    SELECT COUNT(1) FROM  mmall_user WHERE username = #{username}
   </select>
 
 
@@ -168,8 +168,8 @@
     </select>
 
     <!--校验邮箱-->
-    <select id="checkEmail" resultType="java.lang.Integer" parameterType="string">
-     SELECT COUNT (1) FROM  mmall_user WHERE email = #{email}
+    <select id="checkEmail" resultType="int" parameterType="string">
+     SELECT COUNT(1) FROM  mmall_user WHERE email = #{email}
   </select>
 
 
@@ -180,7 +180,7 @@
 
     <!--找回密码-->
     <select id="checkAnswer" resultType="java.lang.Integer" parameterType="map">
-    SELECT  COUNT (1) FROM  mmall_user WHERE  username = #{username} and question = #{question} and answer = #{answer}
+    SELECT  COUNT(1) FROM  mmall_user WHERE  username = #{username} and question = #{question} and answer = #{answer}
   </select>
 
 
@@ -191,10 +191,10 @@
 
 
     <select id="chackPassword" resultType="java.lang.Integer" parameterType="map">
-    SELECT  COUNT (1) FROM mmall_user WHERE id = #{userId} and password = #{password}
+    SELECT  COUNT(1) FROM mmall_user WHERE id = #{userId} and password = #{password}
   </select>
     <select id="checkEmailByUserId" resultType="java.lang.Integer" parameterType="map">
-        SELECT  COUNT (1) FROM  mmall_user WHERE  email = #{email} and id != #{userId}
+        SELECT  COUNT(1) FROM  mmall_user WHERE  email = #{email} and id != #{userId}
 
     </select>
 
