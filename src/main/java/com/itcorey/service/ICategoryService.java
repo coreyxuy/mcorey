@@ -1,6 +1,9 @@
 package com.itcorey.service;
 
 import com.itcorey.common.ServerResponse;
+import com.itcorey.pojo.Category;
+
+import java.util.List;
 
 /**
  * Created by ：Corey
@@ -16,4 +19,19 @@ public interface ICategoryService {
      * @return
      */
     ServerResponse addCategory(String categoryName, Integer parentId);
+
+    /**
+     * 跟新品类信息
+     * @param categroyId
+     * @param categoryName
+     * @return
+     */
+    ServerResponse updateCategory(Integer categroyId, String categoryName);
+
+    /**
+     * 获取categoryId 信息获取子节点平级信息  不递归
+     * @param categoryId
+     * @return
+     */
+    ServerResponse<List<Category>> getChildrenParallelCategory(Integer categoryId);
 }
