@@ -34,4 +34,11 @@ public interface ICategoryService {
      * @return
      */
     ServerResponse<List<Category>> getChildrenParallelCategory(Integer categoryId);
+
+    /**
+     * 递归查询子节点信息和子节点以下信息
+     * @param categoryId
+     * @return
+     */
+    ServerResponse<List<Integer>> selectCategoryAndChildrenById(Integer categoryId);
 }

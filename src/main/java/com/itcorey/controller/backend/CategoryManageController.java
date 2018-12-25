@@ -6,7 +6,6 @@ import com.itcorey.common.ServerResponse;
 import com.itcorey.pojo.User;
 import com.itcorey.service.ICategoryService;
 import com.itcorey.service.IUserService;
-import com.sun.xml.internal.bind.v2.TODO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -30,7 +29,13 @@ public class CategoryManageController {
     @Autowired
     private ICategoryService iCategoryService;
 
-
+    /**
+     * 增加节点
+     * @param session
+     * @param categoryName
+     * @param parentId
+     * @return
+     */
     @RequestMapping("addCategroy.do")
     @ResponseBody
     public ServerResponse addCategroy(HttpSession session, String categoryName, @RequestParam(value = "parentId", defaultValue = "0") int parentId) {
@@ -39,13 +44,11 @@ public class CategoryManageController {
             return ServerResponse.createByErrorCodeMessage(ResponseCode.NEED_LOGIN.getCode(), "用户未登录,请登录");
         }
         //校验是否是管理员
-        ServerResponse serverResponse = iUserService.checkAdminRole(user);
-        if (serverResponse.isSuccess()) {
+        //校验一下是否是管理员
+        if(iUserService.checkAdminRole(user).isSuccess()){
             //是管理员
-
-            //增加我们处理的逻辑
-            return iCategoryService.addCategory(categoryName, parentId);
-
+            //增加我们处理分类的逻辑
+            return iCategoryService.addCategory(categoryName,parentId);
         } else {
             return ServerResponse.createByErrorMessage("无权限操作,需要管理员操作!");
         }
@@ -59,8 +62,9 @@ public class CategoryManageController {
      * @param categoryId
      * @param categoryName
      * @return
+     *
      */
-    @RequestMapping("setCategoryName")
+    @RequestMapping("setCategoryName.do")
     @ResponseBody
     public ServerResponse setCategoryName(HttpSession session, Integer categoryId, String categoryName) {
         User user = (User) session.getAttribute(Const.CURRENT_USER);
@@ -100,6 +104,13 @@ public class CategoryManageController {
 
 
     //递归查询子节点信息
+
+    /**
+     * 获取当前分类id及递归子节点catagoreyId
+     * @param session
+     * @param categoryId
+     * @return
+     */
     @RequestMapping("getDeepCategory.do")
     @ResponseBody
     public ServerResponse getCategoryAndDeepChildrenCategory(HttpSession session, @RequestParam(value = "categoryId", defaultValue = "0") Integer categoryId) {
@@ -109,11 +120,11 @@ public class CategoryManageController {
         }
         if (iUserService.checkAdminRole(user).isSuccess()) {
            //查询当前节点的id递归子节点id
-
+            return iCategoryService.selectCategoryAndChildrenById(categoryId);
         } else {
             return ServerResponse.createByErrorMessage("无权限操作,需要管理员权限!");
         }
-        return  null;
+
     }
 
 

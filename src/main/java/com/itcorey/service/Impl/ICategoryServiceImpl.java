@@ -1,5 +1,7 @@
 package com.itcorey.service.Impl;
 
+import com.google.common.collect.Lists;
+import com.google.common.collect.Sets;
 import com.itcorey.common.ServerResponse;
 import com.itcorey.dao.CategoryMapper;
 import com.itcorey.pojo.Category;
@@ -12,6 +14,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
 
 import java.util.List;
+import java.util.Set;
 
 /**
  * Created by ：Corey
@@ -71,10 +74,44 @@ public class ICategoryServiceImpl implements ICategoryService {
 
     public ServerResponse<List<Category>> getChildrenParallelCategory(Integer categoryId) {
         List<Category> categories = categoryMapper.selectCategoreyChildrenByParentId(categoryId);
-        if (CollectionUtils.isEmpty(categories)){
+        if (CollectionUtils.isEmpty(categories)) {
             logger.info("未找到当前分类的子类信息！");
         }
         return ServerResponse.createBySuccess(categories);
+    }
+
+    /**
+     * 递归查询本节点的id和子节点的id
+     *
+     * @param categoryId
+     * @return
+     */
+    public ServerResponse<List<Integer>> selectCategoryAndChildrenById(Integer categoryId) {
+        Set<Category> categorySet = Sets.newHashSet();
+        findChildCategory(categorySet,categoryId);
+        List<Integer> catagoreyList = Lists.newArrayList();
+        if (catagoreyList != null) {
+            for (Category categoryItem : categorySet) {
+                catagoreyList.add(categoryItem.getId());
+            }
+        }
+        return ServerResponse.createBySuccess(catagoreyList);
+    }
+
+
+    //递归算法 算出子节点(品类的子节点)
+    public Set<Category> findChildCategory(Set<Category> categorySet, Integer categoryId) {
+        Category category = categoryMapper.selectByPrimaryKey(categoryId);
+        if (category != null) {
+            categorySet.add(category);
+        }
+        //查找子节点,递归算法一定有一个退出条件
+        List<Category> categories = categoryMapper.selectCategoreyChildrenByParentId(categoryId);
+        for (Category categoryitem : categories) {
+            findChildCategory(categorySet, categoryitem.getId());
+        }
+        return categorySet;
+
     }
 
 

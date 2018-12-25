@@ -31,9 +31,9 @@
     insert into mmall_category (id, parent_id, name, 
       status, sort_order, create_time, 
       update_time)
-    values (#{id,jdbcType=INTEGER}, #{parentId,jdbcType=INTEGER}, #{name,jdbcType=VARCHAR}, 
+    values ( #{id,jdbcType=INTEGER}, #{parentId,jdbcType=INTEGER}, #{name,jdbcType=VARCHAR},
       #{status,jdbcType=BIT}, #{sortOrder,jdbcType=INTEGER},  now(),
-       now()
+       now())
   </insert>
   <insert id="insertSelective" parameterType="com.itcorey.pojo.Category" >
     insert into mmall_category
@@ -122,7 +122,7 @@
   <select id="selectCategoreyChildrenByParentId" resultType="int" resultMap="BaseResultMap">
     SELECT
     <include refid="Base_Column_List"/>
-    WHERE mmall_category WHERE parent_id = #{parentId}
+    FROM mmall_category WHERE parent_id = #{parentId}
   </select>
 
 
