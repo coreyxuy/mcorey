@@ -73,7 +73,7 @@ public class UserController {
 
     /**
      * 注册校验文本框
-     *
+     *检查用户名是否有效
      * @param str
      * @param type
      * @return
@@ -106,7 +106,7 @@ public class UserController {
      * @param username
      * @return
      */
-    @RequestMapping(value = "forgetGetQuestion.do", method = RequestMethod.POST)
+    @RequestMapping(value = "forget_get_question.do", method = RequestMethod.POST)
     @ResponseBody
     public ServerResponse<String> forgetGetQuestion(String username) {
         return iUserService.selectQuestion(username);

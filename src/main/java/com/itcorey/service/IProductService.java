@@ -1,5 +1,6 @@
 package com.itcorey.service;
 
+import com.github.pagehelper.PageInfo;
 import com.itcorey.common.ServerResponse;
 import com.itcorey.pojo.Product;
 import com.itcorey.vo.ProductDetailVo;
@@ -32,5 +33,41 @@ public interface IProductService {
      * @return
      */
     ServerResponse<ProductDetailVo> mamageProductDetail(Integer productId);
+
+    /**
+     * 商品list
+     * @param PageNum
+     * @param pageSize
+     * @return
+     */
+    ServerResponse<PageInfo> getProductList(int PageNum, int pageSize);
+
+    /**
+     * 产品搜索
+     * @param productName
+     * @param productId
+     * @param pageNum
+     * @param pageSize
+     * @return
+     */
+    ServerResponse<PageInfo> searchProduct(String productName,Integer productId,int pageNum,int pageSize);
+
+    /**
+     * 获取产品详情
+     * @param productId
+     * @return
+     */
+    ServerResponse<ProductDetailVo> getProductDetail(Integer productId);
+
+    /**
+     * 商品搜索
+     * @param keyword
+     * @param categoryId
+     * @param pageNum
+     * @param pageSize
+     * @param orderBy
+     * @return
+     */
+    ServerResponse<PageInfo> getProductByKeywordCategory(String keyword, Integer categoryId, int pageNum, int pageSize, String orderBy);
 
 }
