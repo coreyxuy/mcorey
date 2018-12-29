@@ -1,12 +1,18 @@
 package com.itcorey.service.Impl;
 
+import com.google.common.collect.Lists;
 import com.itcorey.common.Const;
 import com.itcorey.common.ServerResponse;
 import com.itcorey.dao.CartMapper;
 import com.itcorey.pojo.Cart;
 import com.itcorey.service.ICartService;
+import com.itcorey.vo.CartProductVo;
+import com.itcorey.vo.CartVo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import java.math.BigDecimal;
+import java.util.List;
 
 /**
  * Created by ：Corey
@@ -31,10 +37,48 @@ public class ICartServiceImpl implements ICartService {
             cartMapper.updateByPrimaryKey(cartItem);
         }else {
             //产品存在购物车,如果存在就 相加数量
-            int i = cart.getQuantity() + count;
-
+            count = cart.getQuantity() + count;
+            cart.setQuantity(count);
+            cartMapper.updateByPrimaryKey(cart);
         }
         return  null;
     }
+
+
+    private CartVo getCartVoLimit(Integer userId){
+        CartVo cartVo = new CartVo();
+        List<Cart> cartList = cartMapper.selectCartByUserId(userId);
+        List<CartProductVo> productVoList = Lists.newArrayList();
+        BigDecimal cartTotalPrice = new BigDecimal("0");
+        return null;
+    }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 }

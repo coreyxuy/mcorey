@@ -3,6 +3,8 @@ package com.itcorey.dao;
 import com.itcorey.pojo.Cart;
 import org.apache.ibatis.annotations.Param;
 
+import java.util.List;
+
 public interface CartMapper {
     int deleteByPrimaryKey(Integer id);
 
@@ -17,4 +19,9 @@ public interface CartMapper {
     int updateByPrimaryKey(Cart record);
 
     Cart selectCartByUserIdProduct(@Param("userId") Integer userId, @Param("productId") Integer productId);
+
+
+    List<Cart> selectCartByUserId(Integer userId);
+
+
 }
