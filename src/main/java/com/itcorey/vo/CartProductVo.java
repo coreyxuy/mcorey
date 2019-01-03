@@ -23,6 +23,8 @@ public class CartProductVo {
     private Integer productStock;
     private Integer productChecked;//此商品是否勾选
 
+    private String limitQuantity;//限制数量的一个返回结果
+
     public Integer getId() {
         return id;
     }
@@ -117,5 +119,13 @@ public class CartProductVo {
 
     public void setProductChecked(Integer productChecked) {
         this.productChecked = productChecked;
+    }
+
+    public String getLimitQuantity() {
+        return limitQuantity;
+    }
+
+    public void setLimitQuantity(String limitQuantity) {
+        this.limitQuantity = limitQuantity;
     }
 }
