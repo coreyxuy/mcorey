@@ -1,5 +1,8 @@
 package com.itcorey.controller.portal;
 
+import com.alipay.api.AlipayApiException;
+import com.alipay.api.internal.util.AlipaySignature;
+import com.alipay.demo.trade.config.Configs;
 import com.itcorey.common.Const;
 import com.itcorey.common.ResponseCode;
 import com.itcorey.common.ServerResponse;
@@ -55,31 +58,59 @@ public class OrderController {
 
     /**
      * 支付宝支付回调
+     *
      * @param request
      * @return
      */
     @RequestMapping("alipay_callback.do")
     @ResponseBody
     public Object alipayCallback(HttpServletRequest request) {
-        Map<String,String> params = new HashMap<>();
+        Map<String, String> params = new HashMap<>();
         Map requestParams = request.getParameterMap();
         //迭代器遍历
-        for (Iterator iter = requestParams.keySet().iterator();iter.hasNext();){
-            String name = (String)iter.next();
-            String[] valus = (String[])requestParams.get(name);
+        for (Iterator iter = requestParams.keySet().iterator(); iter.hasNext(); ) {
+            String name = (String) iter.next();
+            String[] valus = (String[]) requestParams.get(name);
             String valueStr = "";
-            for (int i = 0 ;i<valus.length;i++){
-                valueStr = (i == valus.length - 1)?valueStr+valus[i]:valueStr+valus[i]+",";
+            for (int i = 0; i < valus.length; i++) {
+                valueStr = (i == valus.length - 1) ? valueStr + valus[i] : valueStr + valus[i] + ",";
             }
-            params.put(name,valueStr);
+            params.put(name, valueStr);
         }
-        logger.info("支付宝回调,sign:{},trade_status{},参数{}",params.get("sign"),params.get("trade_status"),params.toString());
+        logger.info("支付宝回调,sign:{},trade_status{},参数{}", params.get("sign"), params.get("trade_status"), params.toString());
         //验证回调的重要性,是不是支付宝发的,并且避免重复重置
+        params.remove("sign_type");
+        try {
+            boolean alipayRsACheckedv2 = AlipaySignature.rsaCheckV2(params, Configs.getPublicKey(), "utf-8", Configs.getSignType());
+            if (!alipayRsACheckedv2) {
+                return ServerResponse.createByErrorMessage("非法请求,如恶意请求,将会提交网警...");
+            }
+        } catch (AlipayApiException e) {
+            logger.error("支付宝验证回调异常", e);
+        }
+        //TODO 验证各种数据
 
-
-        return null;
-
+        //阿里回调处理
+        ServerResponse serverResponse = iOrderService.aliCallback(params);
+        if (serverResponse.isSuccess()) {
+            return Const.AlipayCallback.RESPONSE_SUCCESS;
+        }
+        return Const.AlipayCallback.RESPONSE_FAILED;
     }
 
+
+    @RequestMapping("query_order_pay_status.do")
+    @ResponseBody
+    public ServerResponse<Boolean> queryOrderPayStatus(HttpSession session, Long orderNo) {
+        User user = (User) session.getAttribute(Const.CURRENT_USER);
+        if (user == null) {
+            return ServerResponse.createByErrorCodeMessage(ResponseCode.NEED_LOGIN.getCode(), ResponseCode.NEED_LOGIN.getDesc());
+        }
+        ServerResponse serverResponse = iOrderService.queryOrderPayStatus(user.getId(), orderNo);
+        if (serverResponse.isSuccess()) {
+            return ServerResponse.createBySuccess(true);
+        }
+        return ServerResponse.createBySuccess(false);
+    }
 
 }
