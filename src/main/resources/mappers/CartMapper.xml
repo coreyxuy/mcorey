@@ -120,7 +120,6 @@
   </update>
 
 
-
     <select id="selectCartByUserIdProductId" parameterType="map" resultMap="BaseResultMap">
         SELECT
         <include refid="Base_Column_List"/>
@@ -139,10 +138,9 @@
     </select>
 
 
-
     <!--根据用户id和产品id删除购物车信息-->
-    <delete id="deleteByUserIdProductIds" parameterType="map" >
-        DELETE  FROM  mmall_cart WHERE  user_id = #{userId}
+    <delete id="deleteByUserIdProductIds" parameterType="map">
+        DELETE FROM mmall_cart WHERE user_id = #{userId}
         <if test="productList != null">
             and product_id in
             <foreach collection="productList" item="item" index="index" open="(" separator="," close=")">
@@ -153,10 +151,10 @@
 
     <!--全选-->
     <update id="checkedOrUncheckProduct" parameterType="map">
-        UPDATE  mmall_cart SET  checked = #{checked},
+        UPDATE mmall_cart SET checked = #{checked},
         update_time = now() where user_id = #{userId}
         <if test="productId != null">
-          and product_id = #{productId}
+            and product_id = #{productId}
         </if>
     </update>
 
@@ -165,7 +163,12 @@
     </select>
 
 
-
+    <select id="selectCheckedCartByUserId" parameterType="int" resultMap="BaseResultMap">
+        SELECT
+        <include refid="Base_Column_List"/>
+        FROM mmall_cart WHERE user_id = #{userId}
+        and checked = 1
+    </select>
 
 
 </mapper>

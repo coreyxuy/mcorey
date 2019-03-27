@@ -95,27 +95,39 @@ public class Const {
         public void setCode(int code) {
             Code = code;
         }
+
+
+        public static OrderStatusEnum codeOf(int code) {
+            for (OrderStatusEnum OrderStatusEnum : values()) {
+                if (OrderStatusEnum.getCode() == code) {
+                    return OrderStatusEnum;
+                }
+            }
+            throw new RuntimeException("没有找到对应的枚举");
+        }
+
+
+
     }
 
-    public interface  AlipayCallback{
+    public interface AlipayCallback {
         String TRADE_STATUS_WAIT_BUYER_PAY = "WAIT_BUYER_PAY";    //交易创建，等待买家付款
         String TRADE_STATUS_TRADE_SUCCESS = "TRADE_SUCCESS";      //交易支付成功
-
         String RESPONSE_SUCCESS = "success";
         String RESPONSE_FAILED = "failed";
 
     }
 
-    public enum  payPlatFormEnum{
-       AliPay(1,"支付宝");
+    public enum payPlatFormEnum {
+        AliPay(1, "支付宝");
 
-       payPlatFormEnum(int code,String value){
-           this.code = code;
-           this.value = value;
-       }
+        payPlatFormEnum(int code, String value) {
+            this.code = code;
+            this.value = value;
+        }
 
-       private String value;
-       private int code;
+        private String value;
+        private int code;
 
         public String getValue() {
             return value;
@@ -135,4 +147,31 @@ public class Const {
     }
 
 
+    public enum PaymentTypeEnum {
+        ONLINE_PAY(1, "在线支付");
+
+        PaymentTypeEnum(int code, String value) {
+            this.code = code;
+            this.value = value;
+        }
+
+        private String value;
+        private int code;
+        public String getValue() {
+            return value;
+        }
+
+        public int getCode() {
+            return code;
+        }
+
+        public static PaymentTypeEnum codeOf(int code) {
+            for (PaymentTypeEnum paymentTypeEnum : values()) {
+                if (paymentTypeEnum.getCode() == code) {
+                    return paymentTypeEnum;
+                }
+            }
+            throw new RuntimeException("没有找到对应的枚举");
+        }
+    }
 }

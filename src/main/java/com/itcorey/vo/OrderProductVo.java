@@ -7,7 +7,7 @@ import java.util.List;
  * Created by ：Corey
  * 15:11 2019/3/27
  */
-public class ProductVo {
+public class OrderProductVo {
 
     private List<OrderItemVo> orderItemVoList;
     private BigDecimal productTotalPricr;

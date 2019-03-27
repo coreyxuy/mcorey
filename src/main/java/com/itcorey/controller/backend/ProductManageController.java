@@ -113,7 +113,6 @@ public class ProductManageController {
     }
 
     /**
-     *
      * @param session
      * @param pageNum
      * @param pageSize
@@ -155,7 +154,7 @@ public class ProductManageController {
         //判断管理员权限
         if (iUserService.checkAdminRole(user).isSuccess()) {
             //动态分页
-            return iProductService.searchProduct(productName,productId,pageNum,pageSize);
+            return iProductService.searchProduct(productName, productId, pageNum, pageSize);
         } else {
             return ServerResponse.createByErrorMessage("无权限操作!");
         }
@@ -201,7 +200,7 @@ public class ProductManageController {
      */
     @RequestMapping("richtext_img_upload.do")
     @ResponseBody
-    public Map richtextImgUpload(HttpServletResponse response , HttpSession session, @RequestParam(value = "upload_file", required = false) MultipartFile file, HttpServletRequest request) {
+    public Map richtextImgUpload(HttpServletResponse response, HttpSession session, @RequestParam(value = "upload_file", required = false) MultipartFile file, HttpServletRequest request) {
         Map resultMap = Maps.newHashMap();
         //判断权限
         User user = (User) session.getAttribute(Const.CURRENT_USER);
@@ -223,7 +222,7 @@ public class ProductManageController {
             resultMap.put("success", true);
             resultMap.put("msg", false);
             resultMap.put("file_path", url);
-            response.addHeader("Access-Control-Allow-Headers","X-File-Name");
+            response.addHeader("Access-Control-Allow-Headers", "X-File-Name");
             return resultMap;
         } else {
             resultMap.put("success", false);
