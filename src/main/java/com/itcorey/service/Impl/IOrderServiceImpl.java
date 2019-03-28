@@ -26,6 +26,7 @@ import com.itcorey.vo.OrderItemVo;
 import com.itcorey.vo.OrderProductVo;
 import com.itcorey.vo.OrderVo;
 import com.itcorey.vo.ShippingVo;
+import com.sun.corba.se.impl.resolver.ORBDefaultInitRefResolverImpl;
 import com.sun.corba.se.spi.presentation.rmi.IDLNameTranslator;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
@@ -314,40 +315,40 @@ public class IOrderServiceImpl implements IOrderService {
 
     /**
      * 个人中心订单列表
+     *
      * @param userId
      * @param pageNum
      * @param pageSize
      * @return
      */
-     public ServerResponse<PageInfo> getOrderrList(Integer userId,int pageNum,int pageSize){
-         PageHelper.startPage(pageNum,pageSize);
-         List<Order> orderList = orderMapper.selectByUserId(userId);
-         List<OrderVo> orderVoList = assembleOrderVoList(orderList,userId);
-         PageInfo pageResult = new PageInfo(orderList);
-         pageResult.setList(orderVoList);
-         return ServerResponse.createBySuccess(pageResult);
-     }
+    public ServerResponse<PageInfo> getOrderrList(Integer userId, int pageNum, int pageSize) {
+        PageHelper.startPage(pageNum, pageSize);
+        List<Order> orderList = orderMapper.selectByUserId(userId);
+        List<OrderVo> orderVoList = assembleOrderVoList(orderList, userId);
+        PageInfo pageResult = new PageInfo(orderList);
+        pageResult.setList(orderVoList);
+        return ServerResponse.createBySuccess(pageResult);
+    }
 
-    private List<OrderVo> assembleOrderVoList(List<Order> orderList,Integer userId){
+    private List<OrderVo> assembleOrderVoList(List<Order> orderList, Integer userId) {
         List<OrderVo> orderVoList = Lists.newArrayList();
-        for (Order order : orderList){
+        for (Order order : orderList) {
             List<OrderItem> orderItemList = Lists.newArrayList();
-            if (userId == null){
-                //todo 管理员查询时候 不需要穿UserId
-            }else {
-                List<OrderItem> byOrderNoUserId = orderItemMapper.getByOrderNoUserId(order.getOrderNo(), userId);
+            if (userId == null) {
+                orderItemList = orderItemMapper.getByOrderNo(order.getOrderNo());
+            } else {
+                orderItemList = orderItemMapper.getByOrderNoUserId(order.getOrderNo(), userId);
             }
-            OrderVo orderVo = assembleOrderVo(order,orderItemList);
+            OrderVo orderVo = assembleOrderVo(order, orderItemList);
             orderVoList.add(orderVo);
         }
         return orderVoList;
-     }
-
-
+    }
 
 
     /**
      * 支付宝支付
+     *
      * @param orderNo
      * @param userId
      * @param path
@@ -525,6 +526,81 @@ public class IOrderServiceImpl implements IOrderService {
         }
         return ServerResponse.createByError();
     }
+
+
+    //backend
+
+    /**
+     * 后台管理员查看订单列表
+     *
+     * @param pageeNum
+     * @param pageSize
+     * @return
+     */
+    public ServerResponse<PageInfo> manageList(int pageeNum, int pageSize) {
+        PageHelper.startPage(pageeNum, pageSize);
+        List<Order> orderList = orderMapper.selectAllOrder();
+        List<OrderVo> orderVoList = this.assembleOrderVoList(orderList, null);
+        PageInfo pageResult = new PageInfo(orderList);
+        pageResult.setList(orderVoList);
+        return ServerResponse.createBySuccess(pageResult);
+    }
+
+    /**
+     * 后台查询订单详情
+     *
+     * @param orderNo
+     * @return
+     */
+    public ServerResponse<OrderVo> manageDetail(Long orderNo) {
+        Order order = orderMapper.selectByOrderNo(orderNo);
+        if (order != null) {
+            List<OrderItem> orderItemList = orderItemMapper.getByOrderNo(orderNo);
+            OrderVo orderVo = assembleOrderVo(order, orderItemList);
+            return ServerResponse.createBySuccess(orderVo);
+        }
+        return ServerResponse.createByErrorMessage("订单不存在!");
+    }
+
+    /**
+     * 按订单号搜索
+     *
+     * @param OrderNo
+     * @return
+     */
+    public ServerResponse<PageInfo> manageSearch(Long OrderNo, int pageNum, int pageSize) {
+        PageHelper.startPage(pageNum, pageSize);
+        Order order = orderMapper.selectByOrderNo(OrderNo);
+        if (order != null) {
+            List<OrderItem> orderItemList = orderItemMapper.getByOrderNo(OrderNo);
+            OrderVo orderVo = assembleOrderVo(order, orderItemList);
+            PageInfo pageResult = new PageInfo(Lists.newArrayList(order));
+            pageResult.setList(Lists.newArrayList(orderVo));
+            return ServerResponse.createBySuccess(pageResult);
+        }
+        return ServerResponse.createByErrorMessage("订单不存在!");
+    }
+
+    /**
+     * 后台管理员发货
+     * @param orderNo
+     * @return
+     */
+    public ServerResponse<String> manageSendGoods(Long orderNo){
+        Order order = orderMapper.selectByOrderNo(orderNo);
+        if (order != null){
+          if (order.getStatus() == Const.OrderStatusEnum.PAID.getCode()){
+              order.setStatus(Const.OrderStatusEnum.SHIPPED.getCode());
+              order.setSendTime(new Date());
+              orderMapper.updateByPrimaryKeySelective(order);
+              return ServerResponse.createBySuccess("发货成功");
+          }
+        }
+        return ServerResponse.createByErrorMessage("订单不存在!");
+
+    }
+
+
 
 
 }

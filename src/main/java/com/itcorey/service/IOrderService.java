@@ -1,5 +1,6 @@
 package com.itcorey.service;
 
+import com.github.pagehelper.PageInfo;
 import com.itcorey.common.ServerResponse;
 import com.itcorey.vo.OrderVo;
 
@@ -66,4 +67,43 @@ public interface IOrderService {
      */
     ServerResponse<OrderVo> getOrderDetail(Integer userId, Long orderNo);
 
+    /**
+     * 个人中心订单列表
+     * @param userId
+     * @param pageNum
+     * @param pageSize
+     * @return
+     */
+    ServerResponse<PageInfo> getOrderrList(Integer userId, int pageNum, int pageSize);
+
+    /**
+     * 后台管理员查看订单
+     * @param pageeNum
+     * @param pageSize
+     * @return
+     */
+    ServerResponse<PageInfo> manageList(int pageeNum,int pageSize);
+
+    /**
+     * 后台查看订单详情
+     * @param orderNo
+     * @return
+     */
+    ServerResponse<OrderVo> manageDetail(Long orderNo);
+
+    /**
+     * 后台搜索查询
+     * @param OrderNo
+     * @param pageNum
+     * @param pageSize
+     * @return
+     */
+    ServerResponse<PageInfo> manageSearch(Long OrderNo, int pageNum, int pageSize);
+
+    /**
+     * 后台管理员发货
+     * @param orderNo
+     * @return
+     */
+    ServerResponse<String> manageSendGoods(Long orderNo);
 }
