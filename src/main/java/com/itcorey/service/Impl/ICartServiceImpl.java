@@ -35,12 +35,12 @@ public class ICartServiceImpl implements ICartService {
     private ProductMapper productMapper;
 
 
-    public ServerResponse<CartVo> add(Integer userId,Integer productId,Integer count){
-        if(productId == null || count == null){
-            return ServerResponse.createByErrorCodeMessage(ResponseCode.ILLEGAL_ARGUMENT.getCode(),ResponseCode.ILLEGAL_ARGUMENT.getDesc());
+    public ServerResponse<CartVo> add(Integer userId, Integer productId, Integer count) {
+        if (productId == null || count == null) {
+            return ServerResponse.createByErrorCodeMessage(ResponseCode.ILLEGAL_ARGUMENT.getCode(), ResponseCode.ILLEGAL_ARGUMENT.getDesc());
         }
-        Cart cart = cartMapper.selectCartByUserIdProductId(userId,productId);
-        if(cart == null){
+        Cart cart = cartMapper.selectCartByUserIdProductId(userId, productId);
+        if (cart == null) {
             //这个产品不在这个购物车里,需要新增一个这个产品的记录
             Cart cartItem = new Cart();
             cartItem.setQuantity(count);
@@ -48,7 +48,7 @@ public class ICartServiceImpl implements ICartService {
             cartItem.setProductId(productId);
             cartItem.setUserId(userId);
             cartMapper.insert(cartItem);
-        }else{
+        } else {
             //这个产品已经在购物车里了.
             //如果产品已存在,数量相加
             count = cart.getQuantity() + count;
@@ -63,12 +63,12 @@ public class ICartServiceImpl implements ICartService {
      *
      * @return
      */
-    public ServerResponse<CartVo> update(Integer userId,Integer productId,Integer count){
-        if(productId == null || count == null){
-            return ServerResponse.createByErrorCodeMessage(ResponseCode.ILLEGAL_ARGUMENT.getCode(),ResponseCode.ILLEGAL_ARGUMENT.getDesc());
+    public ServerResponse<CartVo> update(Integer userId, Integer productId, Integer count) {
+        if (productId == null || count == null) {
+            return ServerResponse.createByErrorCodeMessage(ResponseCode.ILLEGAL_ARGUMENT.getCode(), ResponseCode.ILLEGAL_ARGUMENT.getDesc());
         }
-        Cart cart = cartMapper.selectCartByUserIdProductId(userId,productId);
-        if(cart != null){
+        Cart cart = cartMapper.selectCartByUserIdProductId(userId, productId);
+        if (cart != null) {
             cart.setQuantity(count);
         }
         cartMapper.updateByPrimaryKey(cart);
@@ -101,109 +101,36 @@ public class ICartServiceImpl implements ICartService {
      * @param userId
      * @return
      */
-    public ServerResponse<CartVo> list (Integer userId){
+    public ServerResponse<CartVo> list(Integer userId) {
         CartVo cartVo = this.getCartVoLimit(userId);
         return ServerResponse.createBySuccess(cartVo);
     }
 
-
     /**
      * 选择或者反选所有的
+     *
      * @param userId
      * @param checked
      * @return
      */
-    public ServerResponse<CartVo> selectOrSelect(Integer userId,Integer productId,Integer checked){
-        cartMapper.checkedOrUncheckProduct(userId,productId ,checked);
+    public ServerResponse<CartVo> selectOrSelect(Integer userId, Integer productId, Integer checked) {
+        cartMapper.checkedOrUncheckProduct(userId, productId, checked);
         return this.list(userId);
     }
 
-
     /**
      * 查询购物车总数量
+     *
      * @param userId
      * @return
      */
-    public ServerResponse<Integer> getCartProductCount(Integer userId){
-        if (userId == null){
+    public ServerResponse<Integer> getCartProductCount(Integer userId) {
+        if (userId == null) {
             return ServerResponse.createBySuccess(0);
         }
         //查询购物车总数量
         return ServerResponse.createBySuccess(cartMapper.selectCartProductCount(userId));
     }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
     private CartVo getCartVoLimit(Integer userId) {
         CartVo cartVo = new CartVo();

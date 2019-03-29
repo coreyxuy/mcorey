@@ -6,6 +6,7 @@ import com.itcorey.common.ServerResponse;
 import com.itcorey.dao.CategoryMapper;
 import com.itcorey.pojo.Category;
 import com.itcorey.service.ICategoryService;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -21,9 +22,10 @@ import java.util.Set;
  * 15:31 2018/12/24
  */
 @Service("ICategoryService")
+@Slf4j
 public class ICategoryServiceImpl implements ICategoryService {
 
-    private Logger logger = LoggerFactory.getLogger(ICategoryServiceImpl.class);
+//    private Logger logger = LoggerFactory.getLogger(ICategoryServiceImpl.class);
 
     @Autowired
     private CategoryMapper categoryMapper;
@@ -75,7 +77,7 @@ public class ICategoryServiceImpl implements ICategoryService {
     public ServerResponse<List<Category>> getChildrenParallelCategory(Integer categoryId) {
         List<Category> categories = categoryMapper.selectCategoreyChildrenByParentId(categoryId);
         if (CollectionUtils.isEmpty(categories)) {
-            logger.info("未找到当前分类的子类信息！");
+            log.info("未找到当前分类的子类信息！");
         }
         return ServerResponse.createBySuccess(categories);
     }
