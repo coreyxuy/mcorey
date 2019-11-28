@@ -259,6 +259,12 @@
       <artifactId>gson</artifactId>
       <version>2.3.1</version>
     </dependency>
+    <!-- https://mvnrepository.com/artifact/org.weixin4j/weixin4j -->
+    <dependency>
+      <groupId>org.weixin4j</groupId>
+      <artifactId>weixin4j</artifactId>
+      <version>0.1.5</version>
+    </dependency>
     <dependency>
       <groupId>org.hamcrest</groupId>
       <artifactId>hamcrest-core</artifactId>
