@@ -25,7 +25,7 @@ import java.util.Set;
 @Slf4j
 public class ICategoryServiceImpl implements ICategoryService {
 
-//    private Logger logger = LoggerFactory.getLogger(ICategoryServiceImpl.class);
+    private Logger logger = LoggerFactory.getLogger(ICategoryServiceImpl.class);
 
     @Autowired
     private CategoryMapper categoryMapper;
