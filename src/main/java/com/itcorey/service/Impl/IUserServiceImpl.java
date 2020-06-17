@@ -7,7 +7,6 @@ import com.itcorey.dao.UserMapper;
 import com.itcorey.pojo.User;
 import com.itcorey.service.IUserService;
 import com.itcorey.util.MD5Util;
-import com.sun.org.apache.regexp.internal.RE;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
